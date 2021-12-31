@@ -1,9 +1,18 @@
 #ifndef M5CORE2_LVGL_DEMO_ESP_IDF_POWER_MANAGER_HPP_
 #define M5CORE2_LVGL_DEMO_ESP_IDF_POWER_MANAGER_HPP_
 
+// std library
+#include <stdint.h>
+
+// other libraries
+
+// project header files
+
 class PowerManager {
  public:
   void setup();
+
+  uint32_t getBatteryLevel();
 
   // enable singleton
   static PowerManager& instance() {
