@@ -3,6 +3,6 @@
 # project subdirectory.
 #
 
-PROJECT_NAME := m5core2-lvgl-demo-esp-idf
+PROJECT_NAME := m5core2-time-box
 
 include $(IDF_PATH)/make/project.mk
