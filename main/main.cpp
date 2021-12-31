@@ -1,8 +1,6 @@
 // std library
 
 // other libraries
-#include <lvgl.h>
-#include <lvgl_helpers.h>
 
 // project header files
 #include "lvgl_manager.hpp"
