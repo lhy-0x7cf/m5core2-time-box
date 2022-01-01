@@ -23,20 +23,19 @@ SemaphoreHandle_t xGuiSemaphore;
 // constants
 static const uint32_t kLvTickPeriodMs = 1;
 
+void drawBatteryPercentage() {
+  uint32_t battery_percentage = PowerManager::instance().getBatteryLevel();
+  // battery percentage text
+  static lv_obj_t *battery_percentage_text = lv_label_create(lv_scr_act());
+  lv_obj_align(battery_percentage_text, LV_ALIGN_TOP_RIGHT, -5, 5);
+  lv_label_set_text_fmt(battery_percentage_text, "%d", battery_percentage);
+}
+
 static void lv_tick_task(void *args) {
   (void) args;
   lv_tick_inc(kLvTickPeriodMs);
 }
 
-void drawBatteryStatus() {
-  uint32_t battery_percentage = PowerManager::instance().getBatteryLevel();
-  printf("%d\n", battery_percentage);
-  // battery percentage text
-  lv_obj_t *battery_percentage_text = lv_label_create(lv_scr_act());
-  lv_label_set_text_fmt(battery_percentage_text, "%d", battery_percentage);
-  lv_obj_align(battery_percentage_text, LV_ALIGN_TOP_RIGHT, -5, 5);
-  // lv_obj_center(battery_percentage_text);
-}
 
 void guiTask(void *pvParameter) {
   (void) pvParameter;
@@ -52,11 +51,12 @@ void guiTask(void *pvParameter) {
   ESP_ERROR_CHECK(esp_timer_start_periodic(periodic_timer, kLvTickPeriodMs * 1000));
 
   // gui code
-  drawBatteryStatus();
+  // drawBatteryPercentage();
   
   // forever loop
   while (1) {
     /* Delay 1 tick (assumes FreeRTOS tick is 10ms */
+    drawBatteryPercentage();
     vTaskDelay(pdMS_TO_TICKS(10));
 
     /* Try to take the semaphore, call lvgl related function on success */
