@@ -8,5 +8,5 @@
 
 extern "C" void app_main(void) {
   PowerManager::instance().setup();
-  LvglManager::instance().init();
+  LvglManager::instance().start();
 }

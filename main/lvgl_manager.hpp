@@ -3,7 +3,7 @@
 
 class LvglManager {
  public:
-  void init();
+  void start();
 
   // enable singleton
   static LvglManager& instance() {

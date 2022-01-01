@@ -67,7 +67,7 @@ void guiTask(void *pvParameter) {
   }
 }
 
-void LvglManager::init() {
+void LvglManager::start() {
   // init lvgl and its driver
   lv_init();
   lvgl_driver_init();
