@@ -30,9 +30,10 @@ static void lv_tick_task(void *args) {
 
 void drawBatteryStatus() {
   uint32_t battery_percentage = PowerManager::instance().getBatteryLevel();
+  printf("%d\n", battery_percentage);
   // battery percentage text
   lv_obj_t *battery_percentage_text = lv_label_create(lv_scr_act());
-  lv_label_set_text_fmt(battery_percentage_text, "%d", 40);
+  lv_label_set_text_fmt(battery_percentage_text, "%d", battery_percentage);
   lv_obj_align(battery_percentage_text, LV_ALIGN_TOP_RIGHT, -5, 5);
   // lv_obj_center(battery_percentage_text);
 }
