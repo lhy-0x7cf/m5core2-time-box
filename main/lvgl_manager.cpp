@@ -10,6 +10,7 @@
 
 // project header files
 #include "lvgl_manager.hpp"
+#include "power_manager.hpp"
 #include "sdkconfig.h"
 
 // global variables
@@ -27,6 +28,15 @@ static void lv_tick_task(void *args) {
   lv_tick_inc(kLvTickPeriodMs);
 }
 
+void drawBatteryStatus() {
+  uint32_t battery_percentage = PowerManager::instance().getBatteryLevel();
+  // battery percentage text
+  lv_obj_t *battery_percentage_text = lv_label_create(lv_scr_act());
+  lv_label_set_text_fmt(battery_percentage_text, "%d", 40);
+  lv_obj_align(battery_percentage_text, LV_ALIGN_TOP_RIGHT, -5, 5);
+  // lv_obj_center(battery_percentage_text);
+}
+
 void guiTask(void *pvParameter) {
   (void) pvParameter;
   xGuiSemaphore = xSemaphoreCreateMutex();
@@ -41,25 +51,7 @@ void guiTask(void *pvParameter) {
   ESP_ERROR_CHECK(esp_timer_start_periodic(periodic_timer, kLvTickPeriodMs * 1000));
 
   // gui code
-  /*Create a Tab view object*/
-  lv_obj_t *tab_view;
-  tab_view = lv_tabview_create(lv_scr_act(), LV_DIR_TOP, 50);
-
-  /*Add 3 tabs (the tabs are page (lv_page) and can be scrolled*/
-  lv_obj_t *tab1 = lv_tabview_add_tab(tab_view, "Tab 1");
-  lv_obj_t *tab2 = lv_tabview_add_tab(tab_view, "Tab 2");
-  lv_obj_t *tab3 = lv_tabview_add_tab(tab_view, "Tab 3");
-
-  /*Add content to the tabs*/
-  lv_obj_t *label = lv_label_create(tab1);
-  lv_label_set_text(label, "Tab 1");
-
-  label = lv_label_create(tab2);
-  lv_label_set_text(label, "Tab 2");
-
-  label = lv_label_create(tab3);
-  lv_label_set_text(label, "Tab 3");
-
+  drawBatteryStatus();
   
   // forever loop
   while (1) {
