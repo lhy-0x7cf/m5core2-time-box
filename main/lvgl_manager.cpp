@@ -38,6 +38,29 @@ void drawBatteryPercentage() {
   }
 }
 
+static void set_angle(void *obj, int32_t v) {
+  lv_arc_set_value(static_cast<lv_obj_t *>(obj), v);
+}
+
+void drawCountDownTimer() {
+  // draw progress arc
+  lv_obj_t *progress_arc = lv_arc_create(lv_scr_act());
+  lv_arc_set_rotation(progress_arc, 270);
+  lv_arc_set_bg_angles(progress_arc, 0, 360);
+  lv_obj_remove_style(progress_arc, NULL, LV_PART_KNOB);
+  lv_obj_center(progress_arc);
+
+  lv_anim_t anim;
+  lv_anim_init(&anim);
+  lv_anim_set_var(&anim, progress_arc);
+  lv_anim_set_exec_cb(&anim, set_angle);
+  lv_anim_set_time(&anim, 1000);
+  lv_anim_set_repeat_count(&anim, 1);    /*Just for the demo*/
+  lv_anim_set_repeat_delay(&anim, 500);
+  lv_anim_set_values(&anim, 0, 100);
+  lv_anim_start(&anim);
+}
+
 static void lv_tick_task(void *args) {
   (void) args;
   lv_tick_inc(kLvTickPeriodMs);
@@ -48,7 +71,7 @@ void guiTask(void *pvParameter) {
   (void) pvParameter;
   xGuiSemaphore = xSemaphoreCreateMutex();
 
-  // create and start a timer for lv_tick_inc
+  // create and start anim timer for lv_tick_inc
   const esp_timer_create_args_t periodic_timer_args = {
     .callback = &lv_tick_task,
     .name = "periodic_gui"
@@ -59,6 +82,7 @@ void guiTask(void *pvParameter) {
 
   // gui code
   std::thread battery_status_thread(drawBatteryPercentage);
+  drawCountDownTimer();
   
   // forever loop
   while (1) {
@@ -105,7 +129,7 @@ void LvglManager::start() {
 #endif
 
   // NOTE:
-  // If you want to use a task to create the graphic, you NEED to create a Pinned task.
+  // If you want to use anim task to create the graphic, you NEED to create anim Pinned task.
   // Otherwise there can be problem such as memory corruption and so on.
   // When not using Wi-Fi nor Bluetooth you can pin the guiTask to core 0.
   // If the taks is pinned to core 1, the CPU usage will be 30% higher than core 0.
