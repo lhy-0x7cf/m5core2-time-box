@@ -1,5 +1,4 @@
 // std library
-#include <chrono>
 #include <thread>
 
 // other libraries
@@ -11,8 +10,8 @@
 #include <freertos/task.h>
 
 // project header files
+#include "battery_status.hpp"
 #include "lvgl_manager.hpp"
-#include "../power_manager.hpp"
 #include "sdkconfig.h"
 
 // global variables
@@ -24,19 +23,6 @@ SemaphoreHandle_t xGuiSemaphore;
 
 // constants
 static const uint32_t kLvTickPeriodMs = 1;
-
-void drawBatteryPercentage() {
-  // battery percentage text
-  static uint32_t battery_percentage;
-  static lv_obj_t *battery_percentage_text = lv_label_create(lv_scr_act());
-  lv_obj_align(battery_percentage_text, LV_ALIGN_TOP_RIGHT, -5, 5);
-  while (true) {
-    battery_percentage = PowerManager::instance().getBatteryLevel();
-    printf("[%s] battery_percentage=%d\n", __FUNCTION__, battery_percentage);
-    lv_label_set_text_fmt(battery_percentage_text, "%d%%", battery_percentage);
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-  }
-}
 
 static void set_angle(void *obj, int32_t v) {
   lv_arc_set_value(static_cast<lv_obj_t *>(obj), v);
