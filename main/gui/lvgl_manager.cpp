@@ -12,7 +12,7 @@
 
 // project header files
 #include "lvgl_manager.hpp"
-#include "power_manager.hpp"
+#include "../power_manager.hpp"
 #include "sdkconfig.h"
 
 // global variables
@@ -55,7 +55,7 @@ void drawCountDownTimer() {
   lv_anim_set_var(&anim, progress_arc);
   lv_anim_set_exec_cb(&anim, set_angle);
   lv_anim_set_time(&anim, 1000);
-  lv_anim_set_repeat_count(&anim, 1);    /*Just for the demo*/
+  lv_anim_set_repeat_count(&anim, LV_ANIM_REPEAT_INFINITE);    /*Just for the demo*/
   lv_anim_set_repeat_delay(&anim, 500);
   lv_anim_set_values(&anim, 0, 100);
   lv_anim_start(&anim);
