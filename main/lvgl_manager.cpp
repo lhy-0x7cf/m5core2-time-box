@@ -62,11 +62,10 @@ void guiTask(void *pvParameter) {
   
   // forever loop
   while (1) {
-    /* Delay 1 tick (assumes FreeRTOS tick is 10ms */
-    // drawBatteryPercentage();
+    // delay 1 tick (assumes FreeRTOS tick is 10ms)
     vTaskDelay(pdMS_TO_TICKS(10));
 
-    /* Try to take the semaphore, call lvgl related function on success */
+    // try to take the semaphore, call lvgl related function on success
     if (pdTRUE == xSemaphoreTake(xGuiSemaphore, portMAX_DELAY)) {
       lv_task_handler();
       xSemaphoreGive(xGuiSemaphore);
