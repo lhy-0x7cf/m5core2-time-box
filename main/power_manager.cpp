@@ -36,7 +36,7 @@ uint32_t PowerManager::getBatteryLevel() {
     // Converting method copied from https://github.com/m5stack/M5Core2/blob/master/src/AXP192.cpp#L269
     printf("battery_voltage=%0.2f\n", battery_voltage);
     float battery_percentage = (battery_voltage < 3.248088) ? 0 : (battery_voltage - 3.120712) * 100;
-    printf("battery_percentage=%0.2f\n", battery_percentage);
+    // printf("battery_percentage=%0.2f\n", battery_percentage);
     return static_cast<uint32_t>(std::min(battery_percentage, 100.0f));
   }
   printf("Failed to read the battery voltage.");
