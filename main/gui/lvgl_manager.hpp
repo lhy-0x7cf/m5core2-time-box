@@ -1,5 +1,5 @@
-#ifndef M5CORE2_LVGL_DEMO_ESP_IDF_LVGL_MANAGER_HPP_
-#define M5CORE2_LVGL_DEMO_ESP_IDF_LVGL_MANAGER_HPP_
+#ifndef M5CORE2_TIME_BOX_GUI_LVGL_MANAGER_HPP_
+#define M5CORE2_TIME_BOX_GUI_LVGL_MANAGER_HPP_
 
 class LvglManager {
  public:
@@ -20,4 +20,4 @@ class LvglManager {
   ~LvglManager() = default;
 };
 
-#endif // M5CORE2_LVGL_DEMO_ESP_IDF_LVGL_MANAGER_HPP_
+#endif // M5CORE2_TIME_BOX_GUI_LVGL_MANAGER_HPP_
