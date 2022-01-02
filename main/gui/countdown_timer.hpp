@@ -1,0 +1,8 @@
+#ifndef M5CORE2_TIME_BOX_GUI_COUNTDOWN_TIMER_HPP_
+#define M5CORE2_TIME_BOX_GUI_COUNTDOWN_TIMER_HPP_
+
+void drawTimePicker();
+
+void drawCountdownTimer();
+
+#endif // M5CORE2_TIME_BOX_GUI_COUNTDOWN_TIMER_HPP_
