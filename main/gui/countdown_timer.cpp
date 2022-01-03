@@ -10,21 +10,33 @@
 // project header files
 #include "countdown_timer.hpp"
 
-// global variables
-static uint8_t minute = 5;
-static uint8_t second = 0;
+// common variables
+struct Duration {
+  uint8_t minute = 5;
+  uint8_t second = 0;
 
-// GUI objects
+} duration;
 static lv_obj_t *separate_column_label;
+
+/**
+ * time picker
+ */
 static lv_obj_t *minute_roller;
 static lv_obj_t *second_roller;
 static lv_obj_t *start_btn;
 
-static void hideAllObjects() {
-  lv_obj_add_flag(separate_column_label, LV_OBJ_FLAG_HIDDEN);
+static void hideTimePicker() {
+  // lv_obj_add_flag(separate_column_label, LV_OBJ_FLAG_HIDDEN);
   lv_obj_add_flag(minute_roller, LV_OBJ_FLAG_HIDDEN);
   lv_obj_add_flag(second_roller, LV_OBJ_FLAG_HIDDEN);
   lv_obj_add_flag(start_btn, LV_OBJ_FLAG_HIDDEN);
+}
+
+static void showTimePicker() {
+  // lv_obj_clear_flag(separate_column_label, LV_OBJ_FLAG_HIDDEN);
+  lv_obj_clear_flag(minute_roller, LV_OBJ_FLAG_HIDDEN);
+  lv_obj_clear_flag(second_roller, LV_OBJ_FLAG_HIDDEN);
+  lv_obj_clear_flag(start_btn, LV_OBJ_FLAG_HIDDEN);
 }
 
 static void minute_roller_event_cb(lv_event_t *e) {
@@ -33,8 +45,8 @@ static void minute_roller_event_cb(lv_event_t *e) {
   lv_obj_t *obj = lv_event_get_target(e);
   if (code == LV_EVENT_VALUE_CHANGED) {
     lv_roller_get_selected_str(obj, buf, sizeof(buf));
-    minute = atoi(buf);
-    printf("minute=%d\n", minute);
+    duration.minute = atoi(buf);
+    printf("minute=%d\n", duration.minute);
   }
 }
 
@@ -44,15 +56,15 @@ static void second_roller_event_cb(lv_event_t *e) {
   lv_obj_t *obj = lv_event_get_target(e);
   if (code == LV_EVENT_VALUE_CHANGED) {
     lv_roller_get_selected_str(obj, buf, sizeof(buf));
-    second = atoi(buf);
-    printf("second=%d\n", second);
+    duration.second = atoi(buf);
+    printf("second=%d\n", duration.second);
   }
 }
 
 static void start_btn_event_cb(lv_event_t *e) {
   lv_event_code_t code = lv_event_get_code(e);
   if (code == LV_EVENT_CLICKED) {
-    hideAllObjects();
+    hideTimePicker();
     drawCountdownTimer();
   }
 }
@@ -99,7 +111,7 @@ void drawTimePicker() {
   lv_obj_set_width(minute_roller, kRollerWidth);
   lv_roller_set_options(minute_roller, options, LV_ROLLER_MODE_NORMAL);
   lv_roller_set_visible_row_count(minute_roller, kVisibleRowCount);
-  lv_roller_set_selected(minute_roller, minute, LV_ANIM_OFF);
+  lv_roller_set_selected(minute_roller, duration.minute, LV_ANIM_OFF);
   lv_obj_add_event_cb(minute_roller, minute_roller_event_cb, LV_EVENT_ALL, NULL);
   lv_obj_add_style(minute_roller, &roller_style, 0);
   lv_obj_set_style_text_align(minute_roller, LV_TEXT_ALIGN_RIGHT, 0);
@@ -111,7 +123,7 @@ void drawTimePicker() {
   lv_obj_set_width(second_roller, kRollerWidth);
   lv_roller_set_options(second_roller, options, LV_ROLLER_MODE_NORMAL);
   lv_roller_set_visible_row_count(second_roller, kVisibleRowCount);
-  lv_roller_set_selected(second_roller, second, LV_ANIM_OFF);
+  lv_roller_set_selected(second_roller, duration.second, LV_ANIM_OFF);
   lv_obj_add_event_cb(second_roller, second_roller_event_cb, LV_EVENT_ALL, NULL);
   lv_obj_add_style(second_roller, &roller_style, 0);
   lv_obj_set_style_text_align(second_roller, LV_TEXT_ALIGN_LEFT, 0);
@@ -127,15 +139,33 @@ void drawTimePicker() {
   lv_obj_add_event_cb(start_btn, start_btn_event_cb, LV_EVENT_CLICKED, NULL);
 }
 
+/**
+ * countdown timer
+ */
+static lv_obj_t *progress_arc;
+static lv_obj_t *minute_label;
+static lv_obj_t *second_label;
+
 static void set_angle(void *obj, int32_t v) {
   lv_arc_set_value(static_cast<lv_obj_t *>(obj), v);
 }
 
 void drawCountdownTimer() {
+  // constants
+  static const uint8_t kProgressArcDiameter = 200;
+
+  // center separate column
+  lv_obj_center(separate_column_label);
+
+  // draw minute label
+
+  // draw second label
+  
   // draw progress arc
-  lv_obj_t *progress_arc = lv_arc_create(lv_scr_act());
+  progress_arc = lv_arc_create(lv_scr_act());
   lv_arc_set_rotation(progress_arc, 270);
   lv_arc_set_bg_angles(progress_arc, 0, 360);
+  lv_obj_set_size(progress_arc, kProgressArcDiameter, kProgressArcDiameter);
   lv_obj_remove_style(progress_arc, NULL, LV_PART_KNOB);
   lv_obj_center(progress_arc);
 
