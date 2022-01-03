@@ -45,8 +45,11 @@ void guiTask(void *pvParameter) {
 
   // gui code
   std::thread battery_status_thread(drawBatteryPercentage);
+  // NOTE: 
+  // This delay is a must!
+  // Without this delay, a small crash will happen and the battery percentage cannot be displayed.
+  vTaskDelay(pdMS_TO_TICKS(10));
   drawTimePicker();
-  // drawCountdownTimer();
   
   // forever loop
   while (1) {

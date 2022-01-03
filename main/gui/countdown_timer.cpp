@@ -3,14 +3,29 @@
 #include <cstdlib>
 
 // other libraries
+#include <freertos/FreeRTOS.h>
+#include <freertos/task.h>
 #include <lvgl.h>
 
 // project header files
 #include "countdown_timer.hpp"
 
 // global variables
-static uint8_t minute = 0;
+static uint8_t minute = 5;
 static uint8_t second = 0;
+
+// GUI objects
+static lv_obj_t *separate_column_label;
+static lv_obj_t *minute_roller;
+static lv_obj_t *second_roller;
+static lv_obj_t *start_btn;
+
+static void hideAllObjects() {
+  lv_obj_add_flag(separate_column_label, LV_OBJ_FLAG_HIDDEN);
+  lv_obj_add_flag(minute_roller, LV_OBJ_FLAG_HIDDEN);
+  lv_obj_add_flag(second_roller, LV_OBJ_FLAG_HIDDEN);
+  lv_obj_add_flag(start_btn, LV_OBJ_FLAG_HIDDEN);
+}
 
 static void minute_roller_event_cb(lv_event_t *e) {
   static char buf[3];
@@ -31,6 +46,14 @@ static void second_roller_event_cb(lv_event_t *e) {
     lv_roller_get_selected_str(obj, buf, sizeof(buf));
     second = atoi(buf);
     printf("second=%d\n", second);
+  }
+}
+
+static void start_btn_event_cb(lv_event_t *e) {
+  lv_event_code_t code = lv_event_get_code(e);
+  if (code == LV_EVENT_CLICKED) {
+    hideAllObjects();
+    drawCountdownTimer();
   }
 }
 
@@ -66,17 +89,17 @@ void drawTimePicker() {
   lv_style_set_text_font(&btn_style, &lv_font_montserrat_36);
 
   // create separate column
-  lv_obj_t *separate_column_label = lv_label_create(lv_scr_act());
+  separate_column_label = lv_label_create(lv_scr_act());
   lv_label_set_text(separate_column_label, ":");
   lv_obj_set_style_text_font(separate_column_label, &lv_font_montserrat_24, 0);
   lv_obj_align(separate_column_label, LV_ALIGN_CENTER, 0, -kWidgetCenterOffsetY);
 
   // create minute roller
-  lv_obj_t *minute_roller = lv_roller_create(lv_scr_act());
+  minute_roller = lv_roller_create(lv_scr_act());
   lv_obj_set_width(minute_roller, kRollerWidth);
   lv_roller_set_options(minute_roller, options, LV_ROLLER_MODE_NORMAL);
   lv_roller_set_visible_row_count(minute_roller, kVisibleRowCount);
-  lv_roller_set_selected(minute_roller, 5, LV_ANIM_OFF);
+  lv_roller_set_selected(minute_roller, minute, LV_ANIM_OFF);
   lv_obj_add_event_cb(minute_roller, minute_roller_event_cb, LV_EVENT_ALL, NULL);
   lv_obj_add_style(minute_roller, &roller_style, 0);
   lv_obj_set_style_text_align(minute_roller, LV_TEXT_ALIGN_RIGHT, 0);
@@ -84,11 +107,11 @@ void drawTimePicker() {
   lv_obj_align_to(minute_roller, separate_column_label, LV_ALIGN_RIGHT_MID, -kWidgetGapX, 0);
   
   // create second roller
-  lv_obj_t *second_roller = lv_roller_create(lv_scr_act());
+  second_roller = lv_roller_create(lv_scr_act());
   lv_obj_set_width(second_roller, kRollerWidth);
   lv_roller_set_options(second_roller, options, LV_ROLLER_MODE_NORMAL);
   lv_roller_set_visible_row_count(second_roller, kVisibleRowCount);
-  lv_roller_set_selected(second_roller, 0, LV_ANIM_OFF);
+  lv_roller_set_selected(second_roller, second, LV_ANIM_OFF);
   lv_obj_add_event_cb(second_roller, second_roller_event_cb, LV_EVENT_ALL, NULL);
   lv_obj_add_style(second_roller, &roller_style, 0);
   lv_obj_set_style_text_align(second_roller, LV_TEXT_ALIGN_LEFT, 0);
@@ -96,11 +119,12 @@ void drawTimePicker() {
   lv_obj_align_to(second_roller, separate_column_label, LV_ALIGN_LEFT_MID, kWidgetGapX, 0);
 
   // create start button
-  lv_obj_t *start_btn = lv_btn_create(lv_scr_act());
+  start_btn = lv_btn_create(lv_scr_act());
   lv_obj_add_style(start_btn, &btn_style, 0);
   lv_obj_t *start_btn_label = lv_label_create(start_btn);
   lv_label_set_text(start_btn_label, LV_SYMBOL_PLAY);
   lv_obj_align(start_btn, LV_ALIGN_CENTER, 0, kWidgetCenterOffsetY);
+  lv_obj_add_event_cb(start_btn, start_btn_event_cb, LV_EVENT_CLICKED, NULL);
 }
 
 static void set_angle(void *obj, int32_t v) {
