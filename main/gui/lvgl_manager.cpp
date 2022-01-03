@@ -45,7 +45,8 @@ void guiTask(void *pvParameter) {
 
   // gui code
   std::thread battery_status_thread(drawBatteryPercentage);
-  drawCountdownTimer();
+  drawTimePicker();
+  // drawCountdownTimer();
   
   // forever loop
   while (1) {
