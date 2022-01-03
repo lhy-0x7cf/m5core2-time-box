@@ -44,22 +44,32 @@ void drawTimePicker() {
                                "50\n51\n52\n53\n54\n55\n56\n57\n58\n59";
   static const uint8_t kVisibleRowCount = 1;
   static const uint8_t kRollerWidth = 100;
-  static const uint8_t kWidgetGap = 10;
+  static const uint8_t kWidgetGapX = 15;
+  static const uint8_t kWidgetCenterOffsetY = 35;
 
   // roller style
   static lv_style_t roller_style;
   lv_style_init(&roller_style);
+  lv_style_set_pad_all(&roller_style, 0);
   lv_style_set_border_width(&roller_style, 0);
   lv_style_set_outline_width(&roller_style, 0);
   lv_style_set_bg_opa(&roller_style, LV_OPA_TRANSP);
-  lv_style_set_pad_all(&roller_style, 0);
   lv_style_set_text_font(&roller_style, &lv_font_montserrat_48);
+
+  // button style
+  static lv_style_t btn_style;
+  lv_style_init(&btn_style);
+  lv_style_set_pad_all(&btn_style, 0);
+  lv_style_set_border_width(&btn_style, 0);
+  lv_style_set_outline_width(&btn_style, 0);
+  lv_style_set_bg_opa(&btn_style, LV_OPA_TRANSP);
+  lv_style_set_text_font(&btn_style, &lv_font_montserrat_36);
 
   // create separate column
   lv_obj_t *separate_column_label = lv_label_create(lv_scr_act());
   lv_label_set_text(separate_column_label, ":");
   lv_obj_set_style_text_font(separate_column_label, &lv_font_montserrat_24, 0);
-  lv_obj_center(separate_column_label);
+  lv_obj_align(separate_column_label, LV_ALIGN_CENTER, 0, -kWidgetCenterOffsetY);
 
   // create minute roller
   lv_obj_t *minute_roller = lv_roller_create(lv_scr_act());
@@ -71,7 +81,7 @@ void drawTimePicker() {
   lv_obj_add_style(minute_roller, &roller_style, 0);
   lv_obj_set_style_text_align(minute_roller, LV_TEXT_ALIGN_RIGHT, 0);
   lv_obj_set_style_bg_opa(minute_roller, LV_OPA_TRANSP, LV_PART_SELECTED); // disable this when testing
-  lv_obj_align_to(minute_roller, separate_column_label, LV_ALIGN_RIGHT_MID, -kWidgetGap, 0);
+  lv_obj_align_to(minute_roller, separate_column_label, LV_ALIGN_RIGHT_MID, -kWidgetGapX, 0);
   
   // create second roller
   lv_obj_t *second_roller = lv_roller_create(lv_scr_act());
@@ -83,7 +93,14 @@ void drawTimePicker() {
   lv_obj_add_style(second_roller, &roller_style, 0);
   lv_obj_set_style_text_align(second_roller, LV_TEXT_ALIGN_LEFT, 0);
   lv_obj_set_style_bg_opa(second_roller, LV_OPA_TRANSP, LV_PART_SELECTED); // disable this when testing
-  lv_obj_align_to(second_roller, separate_column_label, LV_ALIGN_LEFT_MID, kWidgetGap, 0);
+  lv_obj_align_to(second_roller, separate_column_label, LV_ALIGN_LEFT_MID, kWidgetGapX, 0);
+
+  // create start button
+  lv_obj_t *start_btn = lv_btn_create(lv_scr_act());
+  lv_obj_add_style(start_btn, &btn_style, 0);
+  lv_obj_t *start_btn_label = lv_label_create(start_btn);
+  lv_label_set_text(start_btn_label, LV_SYMBOL_PLAY);
+  lv_obj_align(start_btn, LV_ALIGN_CENTER, 0, kWidgetCenterOffsetY);
 }
 
 static void set_angle(void *obj, int32_t v) {
