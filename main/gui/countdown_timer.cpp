@@ -45,7 +45,7 @@ void drawTimePicker() {
   lv_style_set_outline_width(&roller_style, 0);
   lv_style_set_bg_opa(&roller_style, LV_OPA_TRANSP);
   lv_style_set_pad_all(&roller_style, 0);
-  // lv_style_set_text_font(&roller_style, LV_FONT_MONTSERRAT_36);
+  lv_style_set_text_font(&roller_style, &lv_font_montserrat_20);
 
   // create separate column
   lv_obj_t *separate_column_label = lv_label_create(lv_scr_act());
@@ -61,7 +61,7 @@ void drawTimePicker() {
   lv_obj_add_event_cb(minute_roller, minute_roller_event_cb, LV_EVENT_ALL, NULL);
   lv_obj_add_style(minute_roller, &roller_style, 0);
   lv_obj_set_style_text_align(minute_roller, LV_TEXT_ALIGN_RIGHT, 0);
-  // lv_obj_set_style_bg_opa(minute_roller, LV_OPA_TRANSP, LV_PART_SELECTED); // disable this when testing
+  lv_obj_set_style_bg_opa(minute_roller, LV_OPA_TRANSP, LV_PART_SELECTED); // disable this when testing
   lv_obj_align_to(minute_roller, separate_column_label, LV_ALIGN_RIGHT_MID, -10, 0);
   
   // create second roller
@@ -73,7 +73,7 @@ void drawTimePicker() {
   lv_obj_add_event_cb(second_roller, second_roller_event_cb, LV_EVENT_ALL, NULL);
   lv_obj_add_style(second_roller, &roller_style, 0);
   lv_obj_set_style_text_align(second_roller, LV_TEXT_ALIGN_LEFT, 0);
-  // lv_obj_set_style_bg_opa(second_roller, LV_OPA_TRANSP, LV_PART_SELECTED); // disable this when testing
+  lv_obj_set_style_bg_opa(second_roller, LV_OPA_TRANSP, LV_PART_SELECTED); // disable this when testing
   lv_obj_align_to(second_roller, separate_column_label, LV_ALIGN_LEFT_MID, 10, 0);
 }
 
