@@ -47,6 +47,7 @@ struct Duration {
 /**
  * time picker
  */
+// GUI objects
 static lv_obj_t *separate_column_label;
 static lv_obj_t *minute_roller;
 static lv_obj_t *second_roller;
@@ -172,6 +173,10 @@ void drawTimePicker() {
 /**
  * countdown timer
  */
+// constants
+static const uint8_t kWidgetCenterOffsetY = 10;
+
+// GUI objects
 static lv_obj_t *progress_arc;
 static lv_obj_t *remaining_time_label;
 static lv_obj_t *return_btn;
@@ -200,41 +205,41 @@ static void updateRemainingTime(void *obj, int32_t v) {
   duration.updateFromSecond(v);
   lv_label_set_text_fmt(remaining_time_label, "%02d : %02d", duration.minute, duration.second);
   printf("remaining seconds = %d\n", v);
+  if (v == 0) {
+    // move remaining time label
+    lv_obj_align(remaining_time_label, LV_ALIGN_CENTER, 0, -2 * kWidgetCenterOffsetY);
+    // button style (redundant, need to think a way to reuse the code)
+    static lv_style_t btn_style;
+    lv_style_init(&btn_style);
+    lv_style_set_pad_all(&btn_style, 0);
+    lv_style_set_border_width(&btn_style, 0);
+    lv_style_set_outline_width(&btn_style, 0);
+    lv_style_set_bg_opa(&btn_style, LV_OPA_TRANSP);
+    lv_style_set_text_font(&btn_style, &lv_font_montserrat_36);
+    // drawing return button
+    return_btn = lv_btn_create(lv_scr_act());
+    lv_obj_add_style(return_btn, &btn_style, 0);
+    lv_obj_t *return_btn_label = lv_label_create(return_btn);
+    lv_label_set_text(return_btn_label, LV_SYMBOL_NEW_LINE);
+    lv_obj_align(return_btn, LV_ALIGN_CENTER, 0, 3 * kWidgetCenterOffsetY);
+    lv_obj_add_event_cb(return_btn, return_btn_event_cb, LV_EVENT_CLICKED, NULL);
+  }
 }
 
 void drawCountdownTimer() {
   // constants
   static const uint8_t kProgressArcDiameter = 200;
-  static const uint8_t kWidgetCenterOffsetY = 10;
 
   // label style
   static lv_style_t label_style;
   lv_style_init(&label_style);
   lv_style_set_text_font(&label_style, &lv_font_montserrat_36);
 
-  // button style (redundant, need to think a way to reuse the code)
-  static lv_style_t btn_style;
-  lv_style_init(&btn_style);
-  lv_style_set_pad_all(&btn_style, 0);
-  lv_style_set_border_width(&btn_style, 0);
-  lv_style_set_outline_width(&btn_style, 0);
-  lv_style_set_bg_opa(&btn_style, LV_OPA_TRANSP);
-  lv_style_set_text_font(&btn_style, &lv_font_montserrat_36);
-
   // draw remaining time label
   remaining_time_label = lv_label_create(lv_scr_act());
   lv_obj_add_style(remaining_time_label, &label_style, 0);
   lv_label_set_text_fmt(remaining_time_label, "%02d : %02d", duration.minute, duration.second);
-  lv_obj_align(remaining_time_label, LV_ALIGN_CENTER, 0, -2 * kWidgetCenterOffsetY);
-  // lv_obj_center(remaining_time_label);
-
-  // drawing return button
-  return_btn = lv_btn_create(lv_scr_act());
-  lv_obj_add_style(return_btn, &btn_style, 0);
-  lv_obj_t *return_btn_label = lv_label_create(return_btn);
-  lv_label_set_text(return_btn_label, LV_SYMBOL_NEW_LINE);
-  lv_obj_align(return_btn, LV_ALIGN_CENTER, 0, 3 * kWidgetCenterOffsetY);
-  lv_obj_add_event_cb(return_btn, return_btn_event_cb, LV_EVENT_CLICKED, NULL);
+  lv_obj_center(remaining_time_label);
 
   // draw progress arc
   progress_arc = lv_arc_create(lv_scr_act());
