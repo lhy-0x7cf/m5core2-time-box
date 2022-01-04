@@ -38,7 +38,7 @@ struct Duration {
     second = sec % 60;
   }
 
-  void backToDefault() {
+  void setToDefault() {
     minute = kDefaultMinute;
     second = kDefaultSecond;
   }
@@ -60,6 +60,8 @@ static void hideTimePicker() {
 }
 
 static void showTimePicker() {
+  lv_roller_set_selected(minute_roller, duration.minute, LV_ANIM_OFF);
+  lv_roller_set_selected(second_roller, duration.second, LV_ANIM_OFF);
   lv_obj_clear_flag(separate_column_label, LV_OBJ_FLAG_HIDDEN);
   lv_obj_clear_flag(minute_roller, LV_OBJ_FLAG_HIDDEN);
   lv_obj_clear_flag(second_roller, LV_OBJ_FLAG_HIDDEN);
@@ -182,6 +184,7 @@ static void hideCountdownTimer() {
 static void return_btn_event_cb(lv_event_t *e) {
   lv_event_code_t code = lv_event_get_code(e);
   if (code == LV_EVENT_CLICKED) {
+    duration.setToDefault();
     hideCountdownTimer();
     showTimePicker();
   }
