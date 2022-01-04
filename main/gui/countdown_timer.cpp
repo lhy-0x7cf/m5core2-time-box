@@ -1,6 +1,8 @@
 // std library
+#include <chrono>
 #include <cstdio>
 #include <cstdlib>
+#include <thread>
 
 // other libraries
 #include <freertos/FreeRTOS.h>
@@ -14,8 +16,10 @@
 struct Duration {
   // constants
   static const uint32_t kDefaultMinute = 5;
-  static const uint32_t kMinuteToMs = 60000;
   static const uint32_t kDefaultSecond = 0;
+
+  static const uint32_t kMinuteToSecond = 60;
+  static const uint32_t kMinuteToMs = 60000;
   static const uint32_t kSecondToMs = 1000;
 
   uint32_t minute = kDefaultMinute;
@@ -25,25 +29,33 @@ struct Duration {
     return (minute * kMinuteToMs) + (second * kSecondToMs);
   }
 
+  uint32_t toSecond() {
+    return minute * kMinuteToSecond + second;
+  }
+
+  void updateFromSecond(const uint32_t& sec) {
+    minute = sec / 60;
+    second = sec % 60;
+  }
 } duration;
-static lv_obj_t *separate_column_label;
 
 /**
  * time picker
  */
+static lv_obj_t *separate_column_label;
 static lv_obj_t *minute_roller;
 static lv_obj_t *second_roller;
 static lv_obj_t *start_btn;
 
 static void hideTimePicker() {
-  // lv_obj_add_flag(separate_column_label, LV_OBJ_FLAG_HIDDEN);
+  lv_obj_add_flag(separate_column_label, LV_OBJ_FLAG_HIDDEN);
   lv_obj_add_flag(minute_roller, LV_OBJ_FLAG_HIDDEN);
   lv_obj_add_flag(second_roller, LV_OBJ_FLAG_HIDDEN);
   lv_obj_add_flag(start_btn, LV_OBJ_FLAG_HIDDEN);
 }
 
 static void showTimePicker() {
-  // lv_obj_clear_flag(separate_column_label, LV_OBJ_FLAG_HIDDEN);
+  lv_obj_clear_flag(separate_column_label, LV_OBJ_FLAG_HIDDEN);
   lv_obj_clear_flag(minute_roller, LV_OBJ_FLAG_HIDDEN);
   lv_obj_clear_flag(second_roller, LV_OBJ_FLAG_HIDDEN);
   lv_obj_clear_flag(start_btn, LV_OBJ_FLAG_HIDDEN);
@@ -153,12 +165,18 @@ void drawTimePicker() {
  * countdown timer
  */
 static lv_obj_t *progress_arc;
-static lv_obj_t *minute_label;
-static lv_obj_t *second_label;
+static lv_obj_t *remaining_time_label;
 static lv_obj_t *return_btn;
 
-static void set_angle(void *obj, int32_t v) {
+static void updateProgressArc(void *obj, int32_t v) {
   lv_arc_set_value(static_cast<lv_obj_t *>(obj), v);
+  printf("progress arc value = %d\n", v);
+}
+
+static void updateRemainingTime(void *obj, int32_t v) {
+  duration.updateFromSecond(v);
+  lv_label_set_text_fmt(remaining_time_label, "%02d:%02d", duration.minute, duration.second);
+  printf("remaining seconds = %d\n", v);
 }
 
 void drawCountdownTimer() {
@@ -171,20 +189,11 @@ void drawCountdownTimer() {
   lv_style_init(&label_style);
   lv_style_set_text_font(&label_style, &lv_font_montserrat_36);
 
-  // center separate column
-  lv_obj_center(separate_column_label);
-
   // draw minute label
-  minute_label = lv_label_create(lv_scr_act());
-  lv_obj_add_style(minute_label, &label_style, 0);
-  lv_label_set_text_fmt(minute_label, "%02d", duration.minute);
-  lv_obj_align_to(minute_label, separate_column_label, LV_ALIGN_RIGHT_MID, -kWidgetGapX, 0);
-
-  // draw second label
-  second_label = lv_label_create(lv_scr_act());
-  lv_obj_add_style(second_label, &label_style, 0);
-  lv_label_set_text_fmt(second_label, "%02d", duration.second);
-  lv_obj_align_to(second_label, separate_column_label, LV_ALIGN_LEFT_MID, kWidgetGapX, 0);
+  remaining_time_label = lv_label_create(lv_scr_act());
+  lv_obj_add_style(remaining_time_label, &label_style, 0);
+  lv_label_set_text_fmt(remaining_time_label, "%02d:%02d", duration.minute, duration.second);
+  lv_obj_center(remaining_time_label);
 
   // draw progress arc
   progress_arc = lv_arc_create(lv_scr_act());
@@ -194,15 +203,27 @@ void drawCountdownTimer() {
   lv_obj_remove_style(progress_arc, NULL, LV_PART_KNOB);
   lv_obj_center(progress_arc);
 
-  // set the animation of progress arc
-  lv_anim_t anim;
-  lv_anim_init(&anim);
-  lv_anim_set_var(&anim, progress_arc);
-  lv_anim_set_exec_cb(&anim, set_angle);
-  lv_anim_set_time(&anim, duration.toMillisecond());
-  lv_anim_set_repeat_count(&anim, 0);
-  // lv_anim_set_repeat_count(&anim, LV_ANIM_REPEAT_INFINITE); // just for the demo
-  // lv_anim_set_repeat_delay(&anim, 500);
-  lv_anim_set_values(&anim, 0, 100);
-  lv_anim_start(&anim);
+  // set the animation to update progress arc
+  lv_anim_t progress_arc_anim;
+  lv_anim_init(&progress_arc_anim);
+  lv_anim_set_var(&progress_arc_anim, progress_arc);
+  lv_anim_set_exec_cb(&progress_arc_anim, updateProgressArc);
+  lv_anim_set_time(&progress_arc_anim, duration.toMillisecond());
+  lv_anim_set_values(&progress_arc_anim, 0, 100);
+  lv_anim_set_repeat_count(&progress_arc_anim, 0);
+  // lv_anim_set_repeat_count(&progress_arc_anim, LV_ANIM_REPEAT_INFINITE); // just for the demo
+  // lv_anim_set_repeat_delay(&progress_arc_anim, 500); // just for the demo
+
+  // set the animation to update remaining time
+  lv_anim_t remaining_time_label_anim;
+  lv_anim_init(&remaining_time_label_anim);
+  lv_anim_set_var(&remaining_time_label_anim, remaining_time_label);
+  lv_anim_set_exec_cb(&remaining_time_label_anim, updateRemainingTime);
+  lv_anim_set_time(&remaining_time_label_anim, duration.toMillisecond());
+  lv_anim_set_values(&remaining_time_label_anim, duration.toSecond(), 0);
+  lv_anim_set_repeat_count(&remaining_time_label_anim, 0);
+  
+  // start animation together
+  lv_anim_start(&progress_arc_anim);
+  lv_anim_start(&remaining_time_label_anim);
 }
