@@ -94,6 +94,7 @@ static void start_btn_event_cb(lv_event_t *e) {
   lv_event_code_t code = lv_event_get_code(e);
   if (code == LV_EVENT_CLICKED) {
     hideTimePicker();
+    // Redrawing is needed, since the animation needs to be reset.
     drawCountdownTimer();
   }
 }
@@ -197,7 +198,7 @@ static void updateProgressArc(void *obj, int32_t v) {
 
 static void updateRemainingTime(void *obj, int32_t v) {
   duration.updateFromSecond(v);
-  lv_label_set_text_fmt(remaining_time_label, "%02d:%02d", duration.minute, duration.second);
+  lv_label_set_text_fmt(remaining_time_label, "%02d : %02d", duration.minute, duration.second);
   printf("remaining seconds = %d\n", v);
 }
 
@@ -224,7 +225,7 @@ void drawCountdownTimer() {
   remaining_time_label = lv_label_create(lv_scr_act());
   lv_obj_add_style(remaining_time_label, &label_style, 0);
   lv_label_set_text_fmt(remaining_time_label, "%02d : %02d", duration.minute, duration.second);
-  lv_obj_align(remaining_time_label, LV_ALIGN_CENTER, 0, -kWidgetCenterOffsetY);
+  lv_obj_align(remaining_time_label, LV_ALIGN_CENTER, 0, -2 * kWidgetCenterOffsetY);
   // lv_obj_center(remaining_time_label);
 
   // drawing return button
