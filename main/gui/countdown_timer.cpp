@@ -10,6 +10,7 @@
 #include <lvgl.h>
 
 // project header files
+#include "../power_manager.hpp"
 #include "countdown_timer.hpp"
 
 // forward declaration
@@ -191,6 +192,7 @@ static void hideCountdownTimer() {
 static void return_btn_event_cb(lv_event_t *e) {
   lv_event_code_t code = lv_event_get_code(e);
   if (code == LV_EVENT_CLICKED) {
+    PowerManager::instance().vibrate(false);
     duration.setToDefault();
     hideCountdownTimer();
     showTimePicker();
@@ -226,6 +228,9 @@ static void updateRemainingTime(void *obj, int32_t v) {
     lv_label_set_text(return_btn_label, LV_SYMBOL_NEW_LINE);
     lv_obj_align(return_btn, LV_ALIGN_CENTER, 0, 3 * kWidgetCenterOffsetY);
     lv_obj_add_event_cb(return_btn, return_btn_event_cb, LV_EVENT_CLICKED, NULL);
+
+    // alarm with motor
+    PowerManager::instance().vibrate(true);
   }
 }
 

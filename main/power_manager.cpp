@@ -31,9 +31,9 @@ void PowerManager::setup() {
 void PowerManager::vibrate(bool on) {
   if (on) {
     axp192_ioctl(I2C_0, AXP192_LDO3_SET_VOLTAGE, 3300); // set motor voltage
-    axp192_ioctl(I2C_0, AXP192_LDO2_ENABLE); // enabel the motor
+    axp192_ioctl(I2C_0, AXP192_LDO3_ENABLE); // enabel the motor
   } else {
-    axp192_ioctl(I2C_0, AXP192_LDO2_DISABLE); // disable the motor
+    axp192_ioctl(I2C_0, AXP192_LDO3_DISABLE); // disable the motor
   }
 }
 
