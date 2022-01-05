@@ -1,7 +1,8 @@
-file(GLOB SOURCES *.c *.cpp)
+file(GLOB MAIN *.c *.cpp)
+file(GLOB MAIN_GUI gui/*.c gui/*.cpp)
 
 idf_component_register(
-    SRCS ${SOURCES}
+    SRCS ${MAIN_GUI} ${MAIN}
     INCLUDE_DIRS ""
 )
 

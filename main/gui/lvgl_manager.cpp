@@ -1,5 +1,4 @@
 // std library
-#include <chrono>
 #include <thread>
 
 // other libraries
@@ -11,8 +10,9 @@
 #include <freertos/task.h>
 
 // project header files
+#include "battery_status.hpp"
+#include "countdown_timer.hpp"
 #include "lvgl_manager.hpp"
-#include "power_manager.hpp"
 #include "sdkconfig.h"
 
 // global variables
@@ -25,30 +25,16 @@ SemaphoreHandle_t xGuiSemaphore;
 // constants
 static const uint32_t kLvTickPeriodMs = 1;
 
-void drawBatteryPercentage() {
-  // battery percentage text
-  static uint32_t battery_percentage;
-  static lv_obj_t *battery_percentage_text = lv_label_create(lv_scr_act());
-  lv_obj_align(battery_percentage_text, LV_ALIGN_TOP_RIGHT, -5, 5);
-  while (true) {
-    battery_percentage = PowerManager::instance().getBatteryLevel();
-    printf("[%s] battery_percentage=%d\n", __FUNCTION__, battery_percentage);
-    lv_label_set_text_fmt(battery_percentage_text, "%d%%", battery_percentage);
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-  }
-}
-
 static void lv_tick_task(void *args) {
   (void) args;
   lv_tick_inc(kLvTickPeriodMs);
 }
 
-
 void guiTask(void *pvParameter) {
   (void) pvParameter;
   xGuiSemaphore = xSemaphoreCreateMutex();
 
-  // create and start a timer for lv_tick_inc
+  // create and start anim timer for lv_tick_inc
   const esp_timer_create_args_t periodic_timer_args = {
     .callback = &lv_tick_task,
     .name = "periodic_gui"
@@ -59,6 +45,11 @@ void guiTask(void *pvParameter) {
 
   // gui code
   std::thread battery_status_thread(drawBatteryPercentage);
+  // NOTE: 
+  // This delay is a must!
+  // Without this delay, a small crash will happen and the battery percentage cannot be displayed.
+  vTaskDelay(pdMS_TO_TICKS(10));
+  drawTimePicker();
   
   // forever loop
   while (1) {
@@ -105,7 +96,7 @@ void LvglManager::start() {
 #endif
 
   // NOTE:
-  // If you want to use a task to create the graphic, you NEED to create a Pinned task.
+  // If you want to use anim task to create the graphic, you NEED to create anim Pinned task.
   // Otherwise there can be problem such as memory corruption and so on.
   // When not using Wi-Fi nor Bluetooth you can pin the guiTask to core 0.
   // If the taks is pinned to core 1, the CPU usage will be 30% higher than core 0.

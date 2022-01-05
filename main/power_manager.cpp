@@ -28,13 +28,21 @@ void PowerManager::setup() {
   vTaskDelay(100 / portTICK_PERIOD_MS);
 }
 
+void PowerManager::vibrate(bool on) {
+  if (on) {
+    axp192_ioctl(I2C_0, AXP192_LDO3_SET_VOLTAGE, 2500); // set motor voltage
+    axp192_ioctl(I2C_0, AXP192_LDO3_ENABLE); // enabel the motor
+  } else {
+    axp192_ioctl(I2C_0, AXP192_LDO3_DISABLE); // disable the motor
+  }
+}
+
 uint32_t PowerManager::getBatteryLevel() {
-  // TODO: change printf to esp logging API
   float battery_voltage = -1.0;
   int rc = axp192_read(I2C_0, AXP192_BATTERY_VOLTAGE, &battery_voltage);
   if (rc == AXP192_OK) {
     // Converting method copied from https://github.com/m5stack/M5Core2/blob/master/src/AXP192.cpp#L269
-    printf("battery_voltage=%0.2f\n", battery_voltage);
+    // printf("battery_voltage=%0.2f\n", battery_voltage);
     float battery_percentage = (battery_voltage < 3.248088) ? 0 : (battery_voltage - 3.120712) * 100;
     // printf("battery_percentage=%0.2f\n", battery_percentage);
     return static_cast<uint32_t>(std::min(battery_percentage, 100.0f));

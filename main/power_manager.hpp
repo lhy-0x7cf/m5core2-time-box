@@ -1,5 +1,5 @@
-#ifndef M5CORE2_LVGL_DEMO_ESP_IDF_POWER_MANAGER_HPP_
-#define M5CORE2_LVGL_DEMO_ESP_IDF_POWER_MANAGER_HPP_
+#ifndef M5CORE2_TIME_BOX_POWER_MANAGER_HPP_
+#define M5CORE2_TIME_BOX_POWER_MANAGER_HPP_
 
 // std library
 #include <stdint.h>
@@ -11,7 +11,7 @@
 class PowerManager {
  public:
   void setup();
-
+  void vibrate(bool on);
   uint32_t getBatteryLevel();
 
   // enable singleton
