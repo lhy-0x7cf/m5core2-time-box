@@ -245,6 +245,7 @@ void drawCountdownTimer() {
   progress_arc = lv_arc_create(lv_scr_act());
   lv_arc_set_rotation(progress_arc, 270);
   lv_arc_set_bg_angles(progress_arc, 0, 360);
+  lv_arc_set_range(progress_arc, 0, duration.toSecond());
   lv_obj_set_size(progress_arc, kProgressArcDiameter, kProgressArcDiameter);
   lv_obj_remove_style(progress_arc, NULL, LV_PART_KNOB);
   lv_obj_clear_flag(progress_arc, LV_OBJ_FLAG_CLICKABLE);
@@ -256,7 +257,8 @@ void drawCountdownTimer() {
   lv_anim_set_var(&progress_arc_anim, progress_arc);
   lv_anim_set_exec_cb(&progress_arc_anim, updateProgressArc);
   lv_anim_set_time(&progress_arc_anim, duration.toMillisecond());
-  lv_anim_set_values(&progress_arc_anim, 0, 100);
+  // NOTE: start from 0 will cause animation not synced with progress arc
+  lv_anim_set_values(&progress_arc_anim, duration.toSecond(), 0);
   lv_anim_set_repeat_count(&progress_arc_anim, 0);
   // lv_anim_set_repeat_count(&progress_arc_anim, LV_ANIM_REPEAT_INFINITE); // just for the demo
   // lv_anim_set_repeat_delay(&progress_arc_anim, 500); // just for the demo
