@@ -12,6 +12,9 @@
 // project header files
 #include "countdown_timer.hpp"
 
+// forward declaration
+void drawCountdownTimer();
+
 // common variables
 struct Duration {
   // constants
@@ -173,8 +176,6 @@ void drawTimePicker() {
 /**
  * countdown timer
  */
-// constants
-static const uint8_t kWidgetCenterOffsetY = 10;
 
 // GUI objects
 static lv_obj_t *progress_arc;
@@ -206,6 +207,8 @@ static void updateRemainingTime(void *obj, int32_t v) {
   lv_label_set_text_fmt(remaining_time_label, "%02d : %02d", duration.minute, duration.second);
   printf("remaining seconds = %d\n", v);
   if (v == 0) {
+    // constants
+    static const uint8_t kWidgetCenterOffsetY = 10;
     // move remaining time label
     lv_obj_align(remaining_time_label, LV_ALIGN_CENTER, 0, -2 * kWidgetCenterOffsetY);
     // button style (redundant, need to think a way to reuse the code)

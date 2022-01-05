@@ -28,8 +28,16 @@ void PowerManager::setup() {
   vTaskDelay(100 / portTICK_PERIOD_MS);
 }
 
+void PowerManager::vibrate(bool on) {
+  if (on) {
+    axp192_ioctl(I2C_0, AXP192_LDO3_SET_VOLTAGE, 3300); // set motor voltage
+    axp192_ioctl(I2C_0, AXP192_LDO2_ENABLE); // enabel the motor
+  } else {
+    axp192_ioctl(I2C_0, AXP192_LDO2_DISABLE); // disable the motor
+  }
+}
+
 uint32_t PowerManager::getBatteryLevel() {
-  // TODO: change printf to esp logging API
   float battery_voltage = -1.0;
   int rc = axp192_read(I2C_0, AXP192_BATTERY_VOLTAGE, &battery_voltage);
   if (rc == AXP192_OK) {

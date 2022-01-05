@@ -9,6 +9,4 @@
 
 void drawTimePicker(); // ONLY CALLED ONCE
 
-void drawCountdownTimer(); // ONLY CALLED ONCE
-
 #endif // M5CORE2_TIME_BOX_GUI_COUNTDOWN_TIMER_HPP_

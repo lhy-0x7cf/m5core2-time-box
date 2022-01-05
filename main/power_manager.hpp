@@ -11,7 +11,7 @@
 class PowerManager {
  public:
   void setup();
-
+  void vibrate(bool on);
   uint32_t getBatteryLevel();
 
   // enable singleton
