@@ -1,4 +1,5 @@
 // std library
+#include <vector>
 
 // other libraries
 #include <lvgl.h>
@@ -8,8 +9,8 @@
 
 // constants
 static const char* const kButtonNames[] = {
-  /*MY_SYMBOL_LOCAL*/ "Local Info",
-  /*MY_SYMBOL_CLOCK*/ "Timer",
+  "Local Info",
+  "Timer",
   LV_SYMBOL_SETTINGS " Settings",
 };
 static const uint16_t kButtonNumber = sizeof(kButtonNames) / sizeof(kButtonNames[0]);
