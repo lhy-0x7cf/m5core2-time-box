@@ -9,8 +9,8 @@
 // constants
 static const char* const kButtonNames[] = {
   /*MY_SYMBOL_LOCAL*/ "Local Info",
-  /*MY_SYMBOL_CLOCK*/ "Countdown Timer",
-  LV_SYMBOL_SETTINGS " Settings"
+  /*MY_SYMBOL_CLOCK*/ "Timer",
+  LV_SYMBOL_SETTINGS " Settings",
 };
 static const uint16_t kButtonNumber = sizeof(kButtonNames) / sizeof(kButtonNames[0]);
 
@@ -33,8 +33,9 @@ void drawNavPage() {
   is_drawn = true;
 
   // constants
-  const uint16_t kMenuWidth = LV_HOR_RES_MAX - 60;
-  const uint16_t kMenuHeight = LV_VER_RES_MAX - 40;
+  const uint16_t kMenuWidth = LV_HOR_RES_MAX;
+  const uint16_t kMenuHeight = LV_VER_RES_MAX - 20;
+  const uint16_t kColumnNumber = 2;
   const uint16_t kButtonHeight = 80;
 
   // menu style
@@ -54,7 +55,7 @@ void drawNavPage() {
   menu = lv_obj_create(lv_scr_act());
   lv_obj_set_size(menu, kMenuWidth, kMenuHeight);
   lv_obj_add_style(menu, &menu_style, 0);
-  lv_obj_center(menu);
+  lv_obj_align(menu, LV_ALIGN_BOTTOM_MID, 0, 0);
   lv_obj_set_flex_flow(menu, LV_FLEX_FLOW_ROW_WRAP);
   lv_obj_set_scrollbar_mode(menu, LV_SCROLLBAR_MODE_ACTIVE);
 
@@ -63,7 +64,13 @@ void drawNavPage() {
   lv_obj_t *label;
   for (int i = 0; i < kButtonNumber; ++i) {
     buttons[i] = lv_btn_create(menu);
-    lv_obj_set_size(buttons[i], LV_PCT(100), kButtonHeight);
+    // NOTE: This make sure there are just 2 columns
+    if (i % kColumnNumber == 0) {
+      // NOTE: force to align the item in the new line
+      lv_obj_add_flag(buttons[i], LV_OBJ_FLAG_FLEX_IN_NEW_TRACK);
+    }
+    lv_obj_set_flex_grow(buttons[i], 1); // flex grow the width
+    lv_obj_set_height(buttons[i], kButtonHeight);
     lv_obj_add_style(buttons[i], &button_style, 0);
     label = lv_label_create(buttons[i]);
     lv_label_set_text(label, kButtonNames[i]);
