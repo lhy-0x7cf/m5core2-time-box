@@ -13,6 +13,7 @@
 #include "battery_status.hpp"
 #include "countdown_timer.hpp"
 #include "lvgl_manager.hpp"
+#include "nav_page.hpp"
 #include "sdkconfig.h"
 
 // global variables
@@ -49,7 +50,8 @@ void guiTask(void *pvParameter) {
   // This delay is a must!
   // Without this delay, a small crash will happen and the battery percentage cannot be displayed.
   vTaskDelay(pdMS_TO_TICKS(10));
-  drawTimePicker();
+  // drawTimePicker();
+  drawNavPage();
   
   // forever loop
   while (1) {
