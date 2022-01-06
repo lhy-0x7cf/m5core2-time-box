@@ -37,7 +37,7 @@ void drawNavPage() {
   const uint16_t kMenuWidth = LV_HOR_RES_MAX;
   const uint16_t kMenuHeight = LV_VER_RES_MAX - 20;
   const uint16_t kColumnNumber = 2;
-  const uint16_t kButtonHeight = 80;
+  const uint16_t kButtonHeight = 90;
 
   // menu style
   static lv_style_t menu_style;
