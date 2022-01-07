@@ -7,13 +7,13 @@
 #include <esp_timer.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/semphr.h>
-#include <freertos/task.h>
 
 // project header files
 #include "lvgl_manager.hpp"
 #include "nav_page.hpp"
 #include "sdkconfig.h"
 #include "status_bar.hpp"
+#include "../utils.hpp"
 
 // global variables
 static lv_disp_drv_t disp_drv;
@@ -48,13 +48,12 @@ void guiTask(void *pvParameter) {
   // NOTE: 
   // This delay is a must!
   // Without this delay, a small crash will happen and the battery percentage cannot be displayed.
-  vTaskDelay(pdMS_TO_TICKS(10));
+  delayInTick(1);
   drawNavPage();
   
   // forever loop
   while (1) {
-    // delay 1 tick (assumes FreeRTOS tick is 10ms)
-    vTaskDelay(pdMS_TO_TICKS(10));
+    delayInTick(1);
 
     // try to take the semaphore, call lvgl related function on success
     if (pdTRUE == xSemaphoreTake(xGuiSemaphore, portMAX_DELAY)) {
