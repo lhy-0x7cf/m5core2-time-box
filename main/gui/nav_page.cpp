@@ -6,11 +6,12 @@
 
 // project header files
 #include "nav_page.hpp"
+#include "countdown_timer.hpp"
 
 // constants
 static const char* const kButtonNames[] = {
-  "Local Info",
   "Timer",
+  "Local Info",
   LV_SYMBOL_SETTINGS " Settings",
 };
 static const uint16_t kButtonNumber = sizeof(kButtonNames) / sizeof(kButtonNames[0]);
@@ -18,6 +19,14 @@ static const uint16_t kButtonNumber = sizeof(kButtonNames) / sizeof(kButtonNames
 // GUI objects
 static lv_obj_t *menu;
 static std::vector<lv_obj_t *> buttons;
+
+static void timer_btn_even_cb(lv_event_t *e) {
+  lv_event_code_t code = lv_event_get_code(e);
+  if (code == LV_EVENT_CLICKED) {
+    hideNavPage();
+    drawTimePicker();
+  }
+}
 
 void showNavPage() {
   for (int i = 0; i < kButtonNumber; ++i) {
