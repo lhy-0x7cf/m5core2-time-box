@@ -10,7 +10,7 @@
 #include <freertos/task.h>
 
 // project header files
-#include "battery_status.hpp"
+// #include "battery_status.hpp"
 #include "lvgl_manager.hpp"
 #include "nav_page.hpp"
 #include "sdkconfig.h"
@@ -44,7 +44,7 @@ void guiTask(void *pvParameter) {
   ESP_ERROR_CHECK(esp_timer_start_periodic(periodic_timer, kLvTickPeriodMs * 1000));
 
   // gui code
-  std::thread battery_status_thread(drawBatteryPercentage);
+  // std::thread battery_status_thread(drawBatteryPercentage);
   // NOTE: 
   // This delay is a must!
   // Without this delay, a small crash will happen and the battery percentage cannot be displayed.
@@ -64,9 +64,9 @@ void guiTask(void *pvParameter) {
   }
 
   // join the thread
-  if (battery_status_thread.joinable()) {
-    battery_status_thread.join();
-  }
+  // if (battery_status_thread.joinable()) {
+  //   battery_status_thread.join();
+  // }
 }
 
 void LvglManager::start() {

@@ -7,7 +7,7 @@
 #include <lvgl.h>
 
 // project header files
-#include "../power_manager.hpp"
+#include "../../power_manager.hpp"
 #include "battery_status.hpp"
 
 void drawBatteryPercentage() {
