@@ -100,26 +100,22 @@ void drawNavPage() {
   }
 }
 
-static void return_to_nav_page_event_cb(lv_event_t *e) {
+void return_to_nav_page_event_cb(lv_event_t *e) {
+  typedef void (*prev_cb_func)();
+
   lv_event_code_t code = lv_event_get_code(e);
+  prev_cb_func hide_current_page = (prev_cb_func) lv_event_get_user_data(e);
   if (code == LV_EVENT_GESTURE) {
     lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
     switch (dir) {
-      case LV_DIR_LEFT:
+      case LV_DIR_RIGHT: // from left to right
+        printf("Swipe from left to right: return\n");
+        hide_current_page();
         drawNavPage();
-        printf("left: return to nav page\n");
-        break;
-      case LV_DIR_RIGHT:
-        printf("right\n");
-        break;
-      case LV_DIR_TOP:
-        printf("top\n");
-        break;
-      case LV_DIR_BOTTOM:
-        printf("buttom\n");
         break;
       default:
-        printf("Unknow gesture!\n");
+        printf("Unhandled gesture\n");
+        break;
     }
   }
 }

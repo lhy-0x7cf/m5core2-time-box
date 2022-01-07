@@ -14,6 +14,6 @@
  */
 void drawNavPage();
 
-static void return_to_nav_page_event_cb(lv_event_t *e);
+void return_to_nav_page_event_cb(lv_event_t *e);
 
 #endif // M5CORE2_TIME_BOX_GUI_NAV_PAGE_HPP_

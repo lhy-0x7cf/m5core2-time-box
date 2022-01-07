@@ -118,6 +118,9 @@ void drawTimePicker() {
   static const uint8_t kWidgetGapX = 15;
   static const uint8_t kWidgetCenterOffsetY = 35;
 
+  // add return to nav page call back
+  lv_obj_add_event_cb(lv_scr_act(), return_to_nav_page_event_cb, LV_EVENT_GESTURE, (void *) hideTimePicker);
+
   // roller style
   static lv_style_t roller_style;
   lv_style_init(&roller_style);
