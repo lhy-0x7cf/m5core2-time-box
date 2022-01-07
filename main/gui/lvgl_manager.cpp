@@ -11,7 +11,6 @@
 
 // project header files
 #include "battery_status.hpp"
-#include "countdown_timer.hpp"
 #include "lvgl_manager.hpp"
 #include "nav_page.hpp"
 #include "sdkconfig.h"
