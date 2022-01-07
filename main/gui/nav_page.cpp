@@ -1,5 +1,7 @@
 // std library
+#include <string>
 #include <vector>
+#include <utility>
 
 // other libraries
 #include <lvgl.h>
@@ -9,12 +11,12 @@
 #include "countdown_timer.hpp"
 
 // constants
-static const char* const kButtonNames[] = {
-  "Timer",
-  "Local Info",
-  LV_SYMBOL_SETTINGS " Settings",
-};
-static const uint16_t kButtonNumber = sizeof(kButtonNames) / sizeof(kButtonNames[0]);
+// static const char* const kButtonNames[] = {
+//   "Timer",
+//   "Local Info",
+//   LV_SYMBOL_SETTINGS " Settings",
+// };
+// static const uint16_t kButtonNumber = sizeof(kButtonNames) / sizeof(kButtonNames[0]);
 
 // GUI objects
 static lv_obj_t *menu;
@@ -28,10 +30,26 @@ static void timer_btn_even_cb(lv_event_t *e) {
   }
 }
 
+static void local_info_btn_even_cb(lv_event_t *e) {
+  // TODO: implement this
+}
+
+static void settings_btn_even_cb(lv_event_t *e) {
+  // TODO: implement this
+}
+
+static std::vector<std::pair<std::string, lv_event_cb_t>> button_utils {
+  {"Timer", timer_btn_even_cb},
+  {"Local Info", local_info_btn_even_cb},
+  {LV_SYMBOL_SETTINGS " Settings", settings_btn_even_cb}
+};
+static const uint16_t kButtonNumber = button_utils.size();
+
 void showNavPage() {
-  for (int i = 0; i < kButtonNumber; ++i) {
-    lv_obj_clear_flag(buttons[i], LV_OBJ_FLAG_HIDDEN);
-  }
+  lv_obj_clear_flag(menu, LV_OBJ_FLAG_HIDDEN);
+  // for (int i = 0; i < kButtonNumber; ++i) {
+    // lv_obj_clear_flag(buttons[i], LV_OBJ_FLAG_HIDDEN);
+  // }
 }
 
 void drawNavPage() {
@@ -74,6 +92,7 @@ void drawNavPage() {
   lv_obj_t *label;
   for (int i = 0; i < kButtonNumber; ++i) {
     buttons[i] = lv_btn_create(menu);
+    lv_obj_add_event_cb(buttons[i], button_utils[i].second, LV_EVENT_CLICKED, NULL);
     // NOTE: This make sure there are just 2 columns
     if (i % kColumnNumber == 0) {
       // NOTE: force to align the item in the new line
@@ -83,14 +102,14 @@ void drawNavPage() {
     lv_obj_set_height(buttons[i], kButtonHeight);
     lv_obj_add_style(buttons[i], &button_style, 0);
     label = lv_label_create(buttons[i]);
-    lv_label_set_text(label, kButtonNames[i]);
+    lv_label_set_text(label, button_utils[i].first.c_str());
     lv_obj_center(label);
   }
 }
 
 void hideNavPage() {
-  // TODO: try to hide the menu to see whether flag hidden will be applied to child elements automatically or not
-  for (int i = 0; i < kButtonNumber; ++i) {
-    lv_obj_add_flag(buttons[i], LV_OBJ_FLAG_HIDDEN);
-  }
+  lv_obj_add_flag(menu, LV_OBJ_FLAG_HIDDEN);
+  // for (int i = 0; i < kButtonNumber; ++i) {
+    // lv_obj_add_flag(buttons[i], LV_OBJ_FLAG_HIDDEN);
+  // }
 }
