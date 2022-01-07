@@ -39,9 +39,6 @@ static const uint16_t kButtonNumber = button_utils.size();
 
 void showNavPage() {
   lv_obj_clear_flag(menu, LV_OBJ_FLAG_HIDDEN);
-  // for (int i = 0; i < kButtonNumber; ++i) {
-    // lv_obj_clear_flag(buttons[i], LV_OBJ_FLAG_HIDDEN);
-  // }
 }
 
 void drawNavPage() {
@@ -101,7 +98,4 @@ void drawNavPage() {
 
 void hideNavPage() {
   lv_obj_add_flag(menu, LV_OBJ_FLAG_HIDDEN);
-  // for (int i = 0; i < kButtonNumber; ++i) {
-    // lv_obj_add_flag(buttons[i], LV_OBJ_FLAG_HIDDEN);
-  // }
 }
