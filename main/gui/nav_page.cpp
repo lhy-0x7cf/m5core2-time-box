@@ -10,17 +10,17 @@
 #include "nav_page.hpp"
 #include "countdown_timer.hpp"
 
-// constants
-// static const char* const kButtonNames[] = {
-//   "Timer",
-//   "Local Info",
-//   LV_SYMBOL_SETTINGS " Settings",
-// };
-// static const uint16_t kButtonNumber = sizeof(kButtonNames) / sizeof(kButtonNames[0]);
-
 // GUI objects
 static lv_obj_t *menu;
 static std::vector<lv_obj_t *> buttons;
+
+void hideNavPage() {
+  lv_obj_add_flag(menu, LV_OBJ_FLAG_HIDDEN);
+}
+
+void showNavPage() {
+  lv_obj_clear_flag(menu, LV_OBJ_FLAG_HIDDEN);
+}
 
 static void timer_btn_even_cb(lv_event_t *e) {
   lv_event_code_t code = lv_event_get_code(e);
@@ -44,13 +44,6 @@ static std::vector<std::pair<std::string, lv_event_cb_t>> button_utils {
   {LV_SYMBOL_SETTINGS " Settings", settings_btn_even_cb}
 };
 static const uint16_t kButtonNumber = button_utils.size();
-
-void showNavPage() {
-  lv_obj_clear_flag(menu, LV_OBJ_FLAG_HIDDEN);
-  // for (int i = 0; i < kButtonNumber; ++i) {
-    // lv_obj_clear_flag(buttons[i], LV_OBJ_FLAG_HIDDEN);
-  // }
-}
 
 void drawNavPage() {
   static bool is_drawn = false;
@@ -107,9 +100,22 @@ void drawNavPage() {
   }
 }
 
-void hideNavPage() {
-  lv_obj_add_flag(menu, LV_OBJ_FLAG_HIDDEN);
-  // for (int i = 0; i < kButtonNumber; ++i) {
-    // lv_obj_add_flag(buttons[i], LV_OBJ_FLAG_HIDDEN);
-  // }
+void return_to_nav_page_event_cb(lv_event_t *e) {
+  typedef void (*prev_cb_func)();
+
+  lv_event_code_t code = lv_event_get_code(e);
+  prev_cb_func hide_current_page = (prev_cb_func) lv_event_get_user_data(e);
+  if (code == LV_EVENT_GESTURE) {
+    lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
+    switch (dir) {
+      case LV_DIR_RIGHT: // from left to right
+        printf("Swipe from left to right: return\n");
+        hide_current_page();
+        drawNavPage();
+        break;
+      default:
+        printf("Unhandled gesture\n");
+        break;
+    }
+  }
 }

@@ -10,8 +10,9 @@
 #include <lvgl.h>
 
 // project header files
-#include "../power_manager.hpp"
+#include "../power_manager.hpp" // vibration
 #include "countdown_timer.hpp"
+#include "nav_page.hpp"
 
 // forward declaration
 void drawCountdownTimer();
@@ -116,6 +117,9 @@ void drawTimePicker() {
   static const uint8_t kRollerWidth = 100;
   static const uint8_t kWidgetGapX = 15;
   static const uint8_t kWidgetCenterOffsetY = 35;
+
+  // add return to nav page call back
+  lv_obj_add_event_cb(lv_scr_act(), return_to_nav_page_event_cb, LV_EVENT_GESTURE, (void *) hideTimePicker);
 
   // roller style
   static lv_style_t roller_style;
