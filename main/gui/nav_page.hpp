@@ -9,4 +9,6 @@ void drawNavPage();
 
 void hideNavPage();
 
+static void return_to_nav_page_event_cb();
+
 #endif // M5CORE2_TIME_BOX_GUI_NAV_PAGE_HPP_

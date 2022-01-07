@@ -49,7 +49,6 @@ void guiTask(void *pvParameter) {
   // This delay is a must!
   // Without this delay, a small crash will happen and the battery percentage cannot be displayed.
   vTaskDelay(pdMS_TO_TICKS(10));
-  // drawTimePicker();
   drawNavPage();
   
   // forever loop

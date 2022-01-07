@@ -10,8 +10,9 @@
 #include <lvgl.h>
 
 // project header files
-#include "../power_manager.hpp"
+#include "../power_manager.hpp" // vibration
 #include "countdown_timer.hpp"
+#include "nav_page.hpp"
 
 // forward declaration
 void drawCountdownTimer();

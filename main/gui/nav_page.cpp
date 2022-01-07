@@ -10,14 +10,6 @@
 #include "nav_page.hpp"
 #include "countdown_timer.hpp"
 
-// constants
-// static const char* const kButtonNames[] = {
-//   "Timer",
-//   "Local Info",
-//   LV_SYMBOL_SETTINGS " Settings",
-// };
-// static const uint16_t kButtonNumber = sizeof(kButtonNames) / sizeof(kButtonNames[0]);
-
 // GUI objects
 static lv_obj_t *menu;
 static std::vector<lv_obj_t *> buttons;
