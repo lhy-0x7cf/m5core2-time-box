@@ -7,12 +7,12 @@
 
 // project header files
 #include "../power_manager.hpp"
+#include "../thread_manager.hpp"
 #include "status_bar.hpp"
 
 // GUI objects
 static lv_obj_t *status_bar;
 static lv_obj_t *battery_status_label;
-static std::vector<std::thread> threads; // TODO: need a thread manager.
 
 void drawBatteryPercentage() {
   // draw battery status label
@@ -48,6 +48,5 @@ void drawStatusBar() {
   lv_obj_set_scrollbar_mode(status_bar, LV_SCROLLBAR_MODE_OFF);
 
   // draw battery text
-  threads.push_back(std::thread(drawBatteryPercentage)); // create a thread to update the battery status
-  
+  ThreadManager::instance().addThread(drawBatteryPercentage);
 }

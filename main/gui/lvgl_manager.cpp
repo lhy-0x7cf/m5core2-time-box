@@ -45,13 +45,13 @@ void guiTask(void *pvParameter) {
 
   // gui code
   drawStatusBar();
-  // NOTE: 
+  // NOTE:
   // This delay is a must!
   // Without this delay, a small crash will happen and the battery percentage cannot be displayed.
   delayInTick(1);
   drawNavPage();
-  
-  // forever loop
+
+  // infinite loop
   while (1) {
     delayInTick(1);
 
