@@ -21,7 +21,6 @@ void drawBatteryPercentage() {
   lv_obj_align(battery_status_label, LV_ALIGN_TOP_RIGHT, 0, 0);
   
   static uint32_t battery_percentage; // battery percentage text
-  // static char *battery_status_symbol;
   while (true) {
     battery_percentage = PowerManager::instance().getBatteryLevel();
     // printf("[%s] battery_percentage=%d\n", __FUNCTION__, battery_percentage);
