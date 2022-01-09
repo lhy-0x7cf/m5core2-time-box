@@ -28,4 +28,4 @@ class WifiManager {
   ~WifiManager() = default;
 };
 
-#endif
+#endif // M5CORE2_TIME_BOX_WIFI_MANAGER_HPP_

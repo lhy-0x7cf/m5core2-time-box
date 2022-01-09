@@ -1,0 +1,6 @@
+#ifndef M5CORE2_TIME_BOX_GUI_WIFI_PAGE_HPP_
+#define M5CORE2_TIME_BOX_GUI_WIFI_PAGE_HPP_
+
+void drawScannedWifi();
+
+#endif // M5CORE2_TIME_BOX_GUI_WIFI_PAGE_HPP_
