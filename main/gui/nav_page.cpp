@@ -12,15 +12,15 @@
 #include "wifi_page.hpp"
 
 // GUI objects
-static lv_obj_t *menu;
+static lv_obj_t *nav_page;
 static std::vector<lv_obj_t *> buttons;
 
 void hideNavPage() {
-  lv_obj_add_flag(menu, LV_OBJ_FLAG_HIDDEN);
+  lv_obj_add_flag(nav_page, LV_OBJ_FLAG_HIDDEN);
 }
 
 void showNavPage() {
-  lv_obj_clear_flag(menu, LV_OBJ_FLAG_HIDDEN);
+  lv_obj_clear_flag(nav_page, LV_OBJ_FLAG_HIDDEN);
 }
 
 static void timer_btn_even_cb(lv_event_t *e) {
@@ -64,16 +64,16 @@ void drawNavPage() {
   is_drawn = true;
 
   // constants
-  const uint16_t kMenuWidth = LV_HOR_RES_MAX;
-  const uint16_t kMenuHeight = LV_VER_RES_MAX - 20;
+  const uint16_t kNavPageWidth = LV_HOR_RES_MAX;
+  const uint16_t kNavPageHeight = LV_VER_RES_MAX - 20;
   const uint16_t kColumnNumber = 2;
   const uint16_t kButtonHeight = 90;
 
-  // menu style
-  static lv_style_t menu_style;
-  lv_style_set_border_width(&menu_style, 0);
-  lv_style_set_outline_width(&menu_style, 0);
-  lv_style_set_bg_opa(&menu_style, LV_OPA_TRANSP);
+  // nav_page style
+  static lv_style_t nav_page_style;
+  lv_style_set_border_width(&nav_page_style, 0);
+  lv_style_set_outline_width(&nav_page_style, 0);
+  lv_style_set_bg_opa(&nav_page_style, LV_OPA_TRANSP);
 
   // button style
   static lv_style_t button_style;
@@ -82,19 +82,19 @@ void drawNavPage() {
   lv_style_set_outline_width(&button_style, 0);
   lv_style_set_bg_opa(&button_style, LV_OPA_TRANSP);
 
-  // draw the menu
-  menu = lv_obj_create(lv_scr_act());
-  lv_obj_set_size(menu, kMenuWidth, kMenuHeight);
-  lv_obj_add_style(menu, &menu_style, 0);
-  lv_obj_align(menu, LV_ALIGN_BOTTOM_MID, 0, 0);
-  lv_obj_set_flex_flow(menu, LV_FLEX_FLOW_ROW_WRAP);
-  lv_obj_set_scrollbar_mode(menu, LV_SCROLLBAR_MODE_ACTIVE);
+  // draw the nav_page
+  nav_page = lv_obj_create(lv_scr_act());
+  lv_obj_set_size(nav_page, kNavPageWidth, kNavPageHeight);
+  lv_obj_add_style(nav_page, &nav_page_style, 0);
+  lv_obj_align(nav_page, LV_ALIGN_BOTTOM_MID, 0, 0);
+  lv_obj_set_flex_flow(nav_page, LV_FLEX_FLOW_ROW_WRAP);
+  lv_obj_set_scrollbar_mode(nav_page, LV_SCROLLBAR_MODE_ACTIVE);
 
   // draw buttons
   buttons.resize(kButtonNumber);
   lv_obj_t *label;
   for (int i = 0; i < kButtonNumber; ++i) {
-    buttons[i] = lv_btn_create(menu);
+    buttons[i] = lv_btn_create(nav_page);
     lv_obj_add_event_cb(buttons[i], button_utils[i].second, LV_EVENT_CLICKED, NULL);
     // NOTE: This make sure there are just 2 columns
     if (i % kColumnNumber == 0) {
