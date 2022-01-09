@@ -106,6 +106,13 @@ static void start_btn_event_cb(lv_event_t *e) {
 }
 
 void drawTimePicker() {
+  static bool is_drawn = false;
+  if (is_drawn) {
+    showTimePicker();
+    return;
+  }
+  is_drawn = true;
+
   // constants
   static const char *options = "00\n01\n02\n03\n04\n05\n06\n07\n08\n09\n"
                                "10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n"
