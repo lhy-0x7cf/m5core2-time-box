@@ -36,7 +36,11 @@ static void local_info_btn_even_cb(lv_event_t *e) {
 }
 
 static void wifi_btn_even_cb(lv_event_t *e) {
-  // TODO: implement this
+  lv_event_code_t code = lv_event_get_code(e);
+  if (code == LV_EVENT_CLICKED) {
+    hideNavPage();
+    drawScannedWifi();
+  }
 }
 
 static void settings_btn_even_cb(lv_event_t *e) {
