@@ -13,6 +13,7 @@
 #include "../power_manager.hpp" // vibration
 #include "countdown_timer.hpp"
 #include "nav_page.hpp"
+#include "utils.hpp"
 
 // forward declaration
 void drawCountdownTimer();
@@ -100,7 +101,6 @@ static void start_btn_event_cb(lv_event_t *e) {
   lv_event_code_t code = lv_event_get_code(e);
   if (code == LV_EVENT_CLICKED) {
     hideTimePicker();
-    // Redrawing is needed, since the animation needs to be reset.
     drawCountdownTimer();
   }
 }
@@ -127,6 +127,7 @@ void drawTimePicker() {
 
   // add return to nav page call back
   lv_obj_add_event_cb(lv_scr_act(), return_to_nav_page_event_cb, LV_EVENT_GESTURE, (void *) hideTimePicker);
+  enablePressLock(lv_scr_act());
 
   // roller style
   static lv_style_t roller_style;
