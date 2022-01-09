@@ -9,6 +9,7 @@
 // project header files
 #include "nav_page.hpp"
 #include "countdown_timer.hpp"
+#include "wifi_page.hpp"
 
 // GUI objects
 static lv_obj_t *menu;
@@ -34,6 +35,10 @@ static void local_info_btn_even_cb(lv_event_t *e) {
   // TODO: implement this
 }
 
+static void wifi_btn_even_cb(lv_event_t *e) {
+  // TODO: implement this
+}
+
 static void settings_btn_even_cb(lv_event_t *e) {
   // TODO: implement this
 }
@@ -41,6 +46,7 @@ static void settings_btn_even_cb(lv_event_t *e) {
 static std::vector<std::pair<std::string, lv_event_cb_t>> button_utils {
   {"Timer", timer_btn_even_cb},
   {"Local Info", local_info_btn_even_cb},
+  {LV_SYMBOL_WIFI " WiFi", wifi_btn_even_cb},
   {LV_SYMBOL_SETTINGS " Settings", settings_btn_even_cb}
 };
 static const uint16_t kButtonNumber = button_utils.size();
