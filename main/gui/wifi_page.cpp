@@ -43,6 +43,7 @@ void drawScannedWifi() {
   
   // add return to nav page call back
   lv_obj_add_event_cb(lv_scr_act(), return_to_nav_page_event_cb, LV_EVENT_GESTURE, (void *) hideScannedWifi);
+  enablePressLock(lv_scr_act());
 
   // constants
   static const uint16_t kListWidth = LV_HOR_RES_MAX;
@@ -64,7 +65,6 @@ void drawScannedWifi() {
 
   lv_list_add_text(scanned_wifi_list, "Scan");
   btn = lv_list_add_btn(scanned_wifi_list, LV_SYMBOL_REFRESH, "Scan");
-  enablePressLock(btn);
   lv_obj_add_event_cb(btn, scan_btn_event_cb, LV_EVENT_CLICKED, NULL);
 
   // list scanned wifi
@@ -74,7 +74,6 @@ void drawScannedWifi() {
   for (int i = 0; i < kMaxScannedWifi; ++i) {
     wifi_name = "WiFi " + std::to_string(i);
     btn = lv_list_add_btn(scanned_wifi_list, LV_SYMBOL_WIFI, wifi_name.c_str());
-    enablePressLock(btn);
     lv_obj_add_event_cb(btn, wifi_btn_event_cb, LV_EVENT_CLICKED, NULL);
   }
 }
