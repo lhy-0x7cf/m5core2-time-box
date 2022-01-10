@@ -45,7 +45,7 @@ void drawStatusBar() {
   lv_obj_set_size(status_bar, kStatusBarWidth, kStatusBarHeight);
   lv_obj_add_style(status_bar, &status_bar_style, 0);
   lv_obj_align(status_bar, LV_ALIGN_TOP_MID, 0, 0);
-  lv_obj_set_scrollbar_mode(status_bar, LV_SCROLLBAR_MODE_OFF);
+  lv_obj_clear_flag(status_bar, LV_OBJ_FLAG_SCROLLABLE);
 
   // draw battery text
   ThreadManager::instance().addThread(drawBatteryPercentage);
