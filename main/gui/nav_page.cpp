@@ -7,8 +7,9 @@
 #include <lvgl.h>
 
 // project header files
-#include "nav_page.hpp"
 #include "countdown_timer.hpp"
+#include "nav_page.hpp"
+#include "status_bar.hpp"
 #include "wifi_page.hpp"
 
 // GUI objects
@@ -65,7 +66,7 @@ void drawNavPage() {
 
   // constants
   const uint16_t kNavPageWidth = LV_HOR_RES_MAX;
-  const uint16_t kNavPageHeight = LV_VER_RES_MAX - 20;
+  const uint16_t kNavPageHeight = LV_VER_RES_MAX - kStatusBarHeight;
   const uint16_t kColumnNumber = 2;
   const uint16_t kButtonHeight = 90;
 
