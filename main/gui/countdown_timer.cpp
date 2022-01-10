@@ -60,6 +60,7 @@ static lv_obj_t *second_roller;
 static lv_obj_t *start_btn;
 
 static void hideTimePicker() {
+  lv_obj_remove_event_cb(lv_scr_act(), return_to_nav_page_event_cb);
   lv_obj_add_flag(separate_column_label, LV_OBJ_FLAG_HIDDEN);
   lv_obj_add_flag(minute_roller, LV_OBJ_FLAG_HIDDEN);
   lv_obj_add_flag(second_roller, LV_OBJ_FLAG_HIDDEN);
@@ -67,6 +68,7 @@ static void hideTimePicker() {
 }
 
 static void showTimePicker() {
+  lv_obj_add_event_cb(lv_scr_act(), return_to_nav_page_event_cb, LV_EVENT_GESTURE, (void *) hideTimePicker);
   lv_roller_set_selected(minute_roller, duration.minute, LV_ANIM_OFF);
   lv_roller_set_selected(second_roller, duration.second, LV_ANIM_OFF);
   lv_obj_clear_flag(separate_column_label, LV_OBJ_FLAG_HIDDEN);
