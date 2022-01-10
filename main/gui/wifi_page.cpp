@@ -12,25 +12,33 @@
 #include "utils.hpp"
 
 // constants
-const uint8_t kMaxScannedWifi = 10;
+static const uint8_t kMaxScannedWifi = 10;
 
 // GUI objects
-static lv_obj_t *scanned_wifi_list;
+static lv_obj_t *wifi_list_page;
 
 void hideScannedWifi() {
-  lv_obj_add_flag(scanned_wifi_list, LV_OBJ_FLAG_HIDDEN);
+  lv_obj_add_flag(wifi_list_page, LV_OBJ_FLAG_HIDDEN);
 }
 
 void showScannedWifi() {
-  lv_obj_clear_flag(scanned_wifi_list, LV_OBJ_FLAG_HIDDEN);
+  lv_obj_clear_flag(wifi_list_page, LV_OBJ_FLAG_HIDDEN);
 }
 
 static void scan_btn_event_cb(lv_event_t *e) {
   // TODO: implement this
+  lv_event_code_t code = lv_event_get_code(e);
+  if (code == LV_EVENT_CLICKED) {
+    printf("Scan button clicked\n"); // test mis-click
+  }
 }
 
 static void wifi_btn_event_cb(lv_event_t *e) {
   // TODO: implement this
+  lv_event_code_t code = lv_event_get_code(e);
+  if (code == LV_EVENT_CLICKED) {
+    printf("WiFi button clicked\n"); // test mis-click
+  }
 }
 
 void drawScannedWifi() {
@@ -40,40 +48,57 @@ void drawScannedWifi() {
     return;
   }
   is_drawn = true;
-  
+
   // add return to nav page call back
   lv_obj_add_event_cb(lv_scr_act(), return_to_nav_page_event_cb, LV_EVENT_GESTURE, (void *) hideScannedWifi);
   enablePressLock(lv_scr_act());
 
   // constants
-  static const uint16_t kListWidth = LV_HOR_RES_MAX;
-  static const uint16_t kListHeight = LV_VER_RES_MAX - kStatusBarHeight;
+  static const uint16_t kPageWidth = LV_HOR_RES_MAX;
+  static const uint16_t kPageHeight = LV_VER_RES_MAX - kStatusBarHeight;
 
-  // scanned_wifi_list style
-  static lv_style_t list_style;
-  lv_style_init(&list_style);
-  // lv_style_set_bg_opa(&list_style, LV_OPA_TRANSP);
-  lv_style_set_text_font(&list_style, &lv_font_montserrat_18);
+  // wifi_list_page style
+  static lv_style_t page_style;
+  lv_style_init(&page_style);
+  lv_style_set_bg_opa(&page_style, LV_OPA_TRANSP);
+  lv_style_set_border_width(&page_style, 0);
+  lv_style_set_outline_width(&page_style, 0);
+  lv_style_set_text_font(&page_style, &lv_font_montserrat_18);
 
-  // draw list
-  scanned_wifi_list = lv_list_create(lv_scr_act());
-  lv_obj_set_size(scanned_wifi_list, kListWidth, kListHeight);
-  lv_obj_align(scanned_wifi_list, LV_ALIGN_BOTTOM_MID, 0, 0);
-  
-  // draw scan button
-  lv_obj_t *btn;
+  // button style
+  static lv_style_t button_style;
+  lv_style_set_border_color(&button_style, lv_color_white());
+  lv_style_set_border_width(&button_style, 1);
+  lv_style_set_outline_width(&button_style, 0);
+  lv_style_set_bg_opa(&button_style, LV_OPA_TRANSP);
 
-  lv_list_add_text(scanned_wifi_list, "Scan");
-  btn = lv_list_add_btn(scanned_wifi_list, LV_SYMBOL_REFRESH, "Scan");
-  lv_obj_add_event_cb(btn, scan_btn_event_cb, LV_EVENT_CLICKED, NULL);
+  // create the page with flex layout
+  wifi_list_page = lv_obj_create(lv_scr_act());
+  lv_obj_set_size(wifi_list_page, kPageWidth, kPageHeight);
+  lv_obj_add_style(wifi_list_page, &page_style, 0);
+  lv_obj_align(wifi_list_page, LV_ALIGN_BOTTOM_MID, 0, 0);
+  lv_obj_set_flex_flow(wifi_list_page, LV_FLEX_FLOW_COLUMN);
+  lv_obj_add_flag(wifi_list_page, LV_OBJ_FLAG_CLICKABLE);
+  enablePressLock(lv_scr_act());
 
-  // list scanned wifi
-  lv_list_add_text(scanned_wifi_list, "Scanned WiFi");
-  // TODO: get the list of scanned wifi from wifi manager
-  std::string wifi_name;
+  // draw the page
+  lv_obj_t *button, *label;
+  // draw the scan button
+  button = lv_btn_create(wifi_list_page);
+  lv_obj_set_size(button, LV_PCT(100), LV_SIZE_CONTENT);
+  lv_obj_add_style(button, &button_style, 0);
+  lv_obj_add_event_cb(button, scan_btn_event_cb, LV_EVENT_CLICKED, NULL);
+  label = lv_label_create(button);
+  lv_label_set_text(label, LV_SYMBOL_REFRESH " Scan");
+  // draw the list of scanned wifi
+  label = lv_label_create(wifi_list_page);
+  lv_label_set_text(label, "Scanned WiFi");
   for (int i = 0; i < kMaxScannedWifi; ++i) {
-    wifi_name = "WiFi " + std::to_string(i);
-    btn = lv_list_add_btn(scanned_wifi_list, LV_SYMBOL_WIFI, wifi_name.c_str());
-    lv_obj_add_event_cb(btn, wifi_btn_event_cb, LV_EVENT_CLICKED, NULL);
+    button = lv_btn_create(wifi_list_page);
+    lv_obj_set_size(button, LV_PCT(100), LV_SIZE_CONTENT);
+    lv_obj_add_style(button, &button_style, 0);
+    lv_obj_add_event_cb(button, wifi_btn_event_cb, LV_EVENT_CLICKED, NULL);
+    label = lv_label_create(button);
+    lv_label_set_text_fmt(label, LV_SYMBOL_WIFI " WiFi %d", i);
   }
 }
