@@ -14,7 +14,6 @@
 
 // GUI objects
 static lv_obj_t *nav_page;
-static std::vector<lv_obj_t *> buttons;
 
 void hideNavPage() {
   lv_obj_add_flag(nav_page, LV_OBJ_FLAG_HIDDEN);
@@ -92,20 +91,19 @@ void drawNavPage() {
   lv_obj_set_scrollbar_mode(nav_page, LV_SCROLLBAR_MODE_ACTIVE);
 
   // draw buttons
-  buttons.resize(kButtonNumber);
-  lv_obj_t *label;
+  lv_obj_t *label, *button;
   for (int i = 0; i < kButtonNumber; ++i) {
-    buttons[i] = lv_btn_create(nav_page);
-    lv_obj_add_event_cb(buttons[i], button_utils[i].second, LV_EVENT_CLICKED, NULL);
+    button = lv_btn_create(nav_page);
+    lv_obj_add_event_cb(button, button_utils[i].second, LV_EVENT_CLICKED, NULL);
     // NOTE: This make sure there are just 2 columns
     if (i % kColumnNumber == 0) {
       // NOTE: force to align the item in the new line
-      lv_obj_add_flag(buttons[i], LV_OBJ_FLAG_FLEX_IN_NEW_TRACK);
+      lv_obj_add_flag(button, LV_OBJ_FLAG_FLEX_IN_NEW_TRACK);
     }
-    lv_obj_set_flex_grow(buttons[i], 1); // flex grow the width
-    lv_obj_set_height(buttons[i], kButtonHeight);
-    lv_obj_add_style(buttons[i], &button_style, 0);
-    label = lv_label_create(buttons[i]);
+    lv_obj_set_flex_grow(button, 1); // flex grow the width
+    lv_obj_set_height(button, kButtonHeight);
+    lv_obj_add_style(button, &button_style, 0);
+    label = lv_label_create(button);
     lv_label_set_text(label, button_utils[i].first.c_str());
     lv_obj_center(label);
   }
