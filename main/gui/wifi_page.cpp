@@ -79,7 +79,6 @@ void drawScannedWifi() {
   lv_obj_align(wifi_list_page, LV_ALIGN_BOTTOM_MID, 0, 0);
   lv_obj_set_flex_flow(wifi_list_page, LV_FLEX_FLOW_COLUMN);
   lv_obj_add_flag(wifi_list_page, LV_OBJ_FLAG_CLICKABLE);
-  enablePressLock(lv_scr_act());
 
   // draw the page
   lv_obj_t *button, *label;
