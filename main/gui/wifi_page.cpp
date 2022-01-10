@@ -18,10 +18,12 @@ static const uint8_t kMaxScannedWifi = 10;
 static lv_obj_t *wifi_list_page;
 
 void hideScannedWifi() {
+  lv_obj_remove_event_cb(lv_scr_act(), return_to_nav_page_event_cb);
   lv_obj_add_flag(wifi_list_page, LV_OBJ_FLAG_HIDDEN);
 }
 
 void showScannedWifi() {
+  lv_obj_add_event_cb(lv_scr_act(), return_to_nav_page_event_cb, LV_EVENT_GESTURE, (void *) hideScannedWifi);
   lv_obj_clear_flag(wifi_list_page, LV_OBJ_FLAG_HIDDEN);
 }
 
