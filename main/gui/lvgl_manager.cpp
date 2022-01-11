@@ -94,5 +94,5 @@ void LvglManager::start() {
   // Otherwise there can be problem such as memory corruption and so on.
   // When not using Wi-Fi nor Bluetooth you can pin the guiTask to core 0.
   // If the taks is pinned to core 1, the CPU usage will be 30% higher than core 0.
-  xTaskCreatePinnedToCore(guiTask, "gui", 4096 * 2, NULL, 0, NULL, 0);
+  xTaskCreatePinnedToCore(guiTask, "gui", 4096 * 2, NULL, 0, NULL, 1);
 }
