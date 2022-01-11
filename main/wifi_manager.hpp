@@ -3,6 +3,8 @@
 
 class WifiManager {
  public:
+  void init_sta();
+
   void connect();
 
   void scanWifi();
