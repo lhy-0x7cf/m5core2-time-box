@@ -30,16 +30,16 @@ void showScannedWifi() {
 static void scan_btn_event_cb(lv_event_t *e) {
   // TODO: implement this
   lv_event_code_t code = lv_event_get_code(e);
-  if (code == LV_EVENT_LONG_PRESSED) {
-    printf("Scan button long pressed\n"); // test mis-click
+  if (code == LV_EVENT_CLICKED) {
+    printf("Scan button clicked\n"); // test mis-click
   }
 }
 
 static void wifi_btn_event_cb(lv_event_t *e) {
   // TODO: implement this
   lv_event_code_t code = lv_event_get_code(e);
-  if (code == LV_EVENT_LONG_PRESSED) {
-    printf("WiFi button long pressed\n"); // test mis-click
+  if (code == LV_EVENT_CLICKED) {
+    printf("WiFi button clicked\n"); // test mis-click
   }
 }
 
@@ -88,9 +88,10 @@ void drawScannedWifi() {
   button = lv_btn_create(wifi_list_page);
   lv_obj_set_size(button, LV_PCT(100), LV_SIZE_CONTENT);
   lv_obj_add_style(button, &button_style, 0);
-  lv_obj_add_event_cb(button, scan_btn_event_cb, LV_EVENT_LONG_PRESSED, NULL);
+  lv_obj_add_event_cb(button, scan_btn_event_cb, LV_EVENT_CLICKED, NULL);
   label = lv_label_create(button);
   lv_label_set_text(label, LV_SYMBOL_REFRESH " Scan");
+  disablePressLock(button);
   // draw the list of scanned wifi
   label = lv_label_create(wifi_list_page);
   lv_label_set_text(label, "Scanned WiFi");
@@ -98,8 +99,9 @@ void drawScannedWifi() {
     button = lv_btn_create(wifi_list_page);
     lv_obj_set_size(button, LV_PCT(100), LV_SIZE_CONTENT);
     lv_obj_add_style(button, &button_style, 0);
-    lv_obj_add_event_cb(button, wifi_btn_event_cb, LV_EVENT_LONG_PRESSED, NULL);
+    lv_obj_add_event_cb(button, wifi_btn_event_cb, LV_EVENT_CLICKED, NULL);
     label = lv_label_create(button);
     lv_label_set_text_fmt(label, LV_SYMBOL_WIFI " WiFi %d", i);
+    disablePressLock(button);
   }
 }

@@ -186,6 +186,7 @@ void drawTimePicker() {
   lv_label_set_text(start_btn_label, LV_SYMBOL_PLAY);
   lv_obj_align(start_btn, LV_ALIGN_CENTER, 0, kWidgetCenterOffsetY);
   lv_obj_add_event_cb(start_btn, start_btn_event_cb, LV_EVENT_CLICKED, NULL);
+  disablePressLock(start_btn);
 }
 
 /**

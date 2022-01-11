@@ -10,4 +10,6 @@
 
 void enablePressLock(lv_obj_t *obj);
 
+void disablePressLock(lv_obj_t *obj);
+
 #endif // M5CORE2_TIME_BOX_GUI_UTILS_HPP_
